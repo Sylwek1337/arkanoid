@@ -1,5 +1,7 @@
 package pl.kielce.tu.arkanoid;
 	
+import com.sun.prism.Graphics;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -19,6 +21,8 @@ public class Main extends Application implements EventHandler<KeyEvent>{
 
 	public static final String APP_NAME = "Arkanoid";
 	
+	Ball ball;
+	Shelf shelf;
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -31,36 +35,62 @@ public class Main extends Application implements EventHandler<KeyEvent>{
 		
 		Values.gameState = GameState.MENU;
 		
-		GraphicsRenderer.width = Screen.getPrimary().getBounds().getWidth();
-		GraphicsRenderer.height = Screen.getPrimary().getBounds().getHeight();
+		GraphicsSystem.width = Screen.getPrimary().getBounds().getWidth();
+		GraphicsSystem.height = Screen.getPrimary().getBounds().getHeight();
 		
-		Canvas canvas  = new Canvas(GraphicsRenderer.width, GraphicsRenderer.height);
+		Canvas canvas  = new Canvas(GraphicsSystem.width, GraphicsSystem.height);
 		GraphicsContext context = canvas.getGraphicsContext2D();
 		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), e->run(context)));
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		
 		Scene scene = new Scene(new StackPane(canvas));
+		
 		scene.setOnKeyPressed(this);
+		scene.setOnKeyReleased(event -> {
+			switch(event.getCode()) {
+			case LEFT:
+				Values.leftKeyPressed = false;
+				break;
+			case RIGHT:
+				Values.rightKeyPressed = false;
+				break;
+			default:
+				break;
+			}
+		});
+		
 		primaryStage.setScene(scene);
+		
+		ball = new Ball(GraphicsSystem.width/2 - 10, GraphicsSystem.height *0.8, 20, 3, -3);
+		GraphicsSystem.ball = ball;
+		EventSystem.ball = ball;
+		
+		shelf = new Shelf(GraphicsSystem.width/2 -100, GraphicsSystem.height*0.9, 200, 7);
+		GraphicsSystem.shelf = shelf;
+		EventSystem.shelf = shelf;
 		
 		primaryStage.show();
 		timeline.play(); 
 	}
 	
 	private void run(GraphicsContext context) {
-		GraphicsRenderer.setBackground(context);
+		GraphicsSystem.setBackground(context);
 		
 		switch(Values.gameState) {
 		case GAME:
-			showGame(context);
+			GraphicsSystem.showGame(context);
+			GraphicsSystem.showBall(context);
+			EventSystem.moveBall();
+			GraphicsSystem.showShelf(context);
+			EventSystem.moveShelf(context);
 			break;
 		case HIGHSCORES:
 			break;
 		case MENU:
-			GraphicsRenderer.showMenu(context);
+			GraphicsSystem.showMenu(context);
 			break;
 		case SETTINGS:
-			GraphicsRenderer.showSettings(context);
+			GraphicsSystem.showSettings(context);
 			break;
 		case QUIT:
 			Platform.exit();
@@ -70,29 +100,36 @@ public class Main extends Application implements EventHandler<KeyEvent>{
 		}
 	}
 
-	
-	private void showGame(GraphicsContext context) {
-		
-	}
-	
 	@Override
 	public void handle(KeyEvent event) {
 		switch(Values.gameState) {
 		case GAME:
+			EventSystem.handleGameEvent(event);
 			break;
 		case HIGHSCORES:
 			break;
 		case MENU:
-			EventHandle.handleMenuEvent(event);
+			EventSystem.handleMenuEvent(event);
 			break;
 		case QUIT:
 			break;
 		case SETTINGS:
-			EventHandle.handleSettingsEvent(event);
+			EventSystem.handleSettingsEvent(event);
 			break;
 		default:
 			break;
 		
+		}
+		
+		if(Values.newGame) {
+			Values.gameStarted = false;
+			Values.newGame = false;
+			ball = new Ball(GraphicsSystem.width/2 - 10, GraphicsSystem.height *0.8, 20, 3, -3);
+			GraphicsSystem.ball = ball;
+			EventSystem.ball = ball;
+			shelf = new Shelf(GraphicsSystem.width/2 -100, GraphicsSystem.height*0.9, 200, 7);
+			GraphicsSystem.shelf = shelf;
+			EventSystem.shelf = shelf;
 		}
 		
 	}

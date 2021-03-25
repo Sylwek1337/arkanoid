@@ -7,4 +7,14 @@ public class Values {
 	static int currentSettingsOption = 0;
 	static int currentDifficultyLevel = 0;
 	static boolean soundEnabled = true;
+	static boolean leftKeyPressed = false;
+	static boolean rightKeyPressed = false;
+	static boolean newGame = false;
+
+	static MoveDirection direction = MoveDirection.LEFT;
+}
+
+enum MoveDirection{
+	LEFT,
+	RIGHT
 }
