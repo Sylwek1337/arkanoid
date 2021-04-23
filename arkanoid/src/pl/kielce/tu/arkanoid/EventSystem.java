@@ -29,30 +29,49 @@ public class EventSystem {
 	}
 
 	public static void handleSettingsEvent(KeyEvent event) {
-		if(event.getCode() == KeyCode.DOWN) {
-			if(Values.currentSettingsOption < 1) Values.currentSettingsOption++;
-		}
-		else if(event.getCode() == KeyCode.UP) {
-			if(Values.currentSettingsOption > 0) Values.currentSettingsOption--;
-		}
 		
-		switch(Values.currentSettingsOption) {
-		case 0:
-			if(event.getCode() == KeyCode.RIGHT) {
-				if(Values.currentDifficultyLevel < 2) Values.currentDifficultyLevel++;
-			}
-			if(event.getCode() == KeyCode.LEFT) {
-				if(Values.currentDifficultyLevel > 0) Values.currentDifficultyLevel--;
-			}
+		switch(event.getCode()) {
+		case DOWN:
+			if(Values.currentSettingsOption < 1) Values.currentSettingsOption++;
 			break;
-		case 1:
-			if(event.getCode() == KeyCode.RIGHT) Values.soundEnabled = true;
-			else if(event.getCode() == KeyCode.LEFT) Values.soundEnabled = false;
+		case UP:
+			if(Values.currentSettingsOption > 0) Values.currentSettingsOption--;
 			break;
-			
+		case ESCAPE:
+			Values.gameState = GameState.MENU;
+			break;
 		default:
 			break;
 		}
+
+		if(Values.currentSettingsOption == 0) {
+			switch(event.getCode()) {
+			case RIGHT:
+				if(Values.difficultyLevel.toInt() < 3) {
+					Values.difficultyLevel = Values.difficultyLevel.next();
+				}
+				break;
+			case LEFT:
+				if(Values.difficultyLevel.toInt() > 0) {
+					Values.difficultyLevel = Values.difficultyLevel.prev();
+				}
+			default:
+				break;
+			}
+		}
+		else if(Values.currentSettingsOption == 1) {
+			switch(event.getCode()) {
+			case RIGHT:
+				Values.soundEnabled = true;
+				break;
+			case LEFT:
+				Values.soundEnabled = false;
+				break;
+			default: 
+				break;
+			}
+		}
+
 	}
 
 	public static void handleGameEvent(KeyEvent event) {

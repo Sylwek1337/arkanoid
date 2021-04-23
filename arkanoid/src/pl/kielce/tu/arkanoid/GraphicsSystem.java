@@ -11,7 +11,7 @@ public class GraphicsSystem {
 	
 	static final String[] MENU_ITEMS = {"New game", "Settings", "Highscores", "Quit"};
 	static final String[] SETTINGS_ITEMS = {"Difficulty level", "Sound"};
-	static final String[] DIFFICULTY_LEVELS = {"Easy", "Medium", "Hard"};
+	static final String[] DIFFICULTY_LEVELS = {"Easy", "Medium", "Hard", "Impossible"};
 	static final String[] SOUND_STATE = {"Yes", "No"};
 	
 	static final Color greyColor = new Color(0.4, 0.4, 0.5, 1);
@@ -55,7 +55,7 @@ public class GraphicsSystem {
 			context.fillText(SETTINGS_ITEMS[i], width * 0.25, height*0.35 + height*i*0.15);
 			
 			if(i == 0) {
-				context.fillText(DIFFICULTY_LEVELS[Values.currentDifficultyLevel], width * 0.65, height*0.35 + height*i*0.15);
+				context.fillText(DIFFICULTY_LEVELS[Values.difficultyLevel.toInt()], width * 0.65, height*0.35 + height*i*0.15);
 			}
 			if(i == 1) {
 				context.fillText(Values.soundEnabled ? SOUND_STATE[0] : SOUND_STATE[1], width * 0.65, height*0.35 + height*i*0.15);

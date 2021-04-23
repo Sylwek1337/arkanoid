@@ -5,12 +5,12 @@ public class Values {
 	static int currentMenuOption = 0;
 	static boolean gameStarted = false;
 	static int currentSettingsOption = 0;
-	static int currentDifficultyLevel = 0;
+	static DifficultyLevel difficultyLevel;
 	static boolean soundEnabled = true;
 	static boolean leftKeyPressed = false;
 	static boolean rightKeyPressed = false;
 	static boolean newGame = false;
-
+	
 	static MoveDirection direction = MoveDirection.LEFT;
 }
 

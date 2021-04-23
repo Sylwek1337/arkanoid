@@ -24,6 +24,8 @@ public class Main extends Application implements EventHandler<KeyEvent>{
 	Ball ball;
 	Shelf shelf;
 	Block[][] blocks;
+	
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -40,6 +42,8 @@ public class Main extends Application implements EventHandler<KeyEvent>{
 		
 		GraphicsSystem.width = Screen.getPrimary().getBounds().getWidth();
 		GraphicsSystem.height = Screen.getPrimary().getBounds().getHeight();
+		
+		Values.difficultyLevel = DifficultyLevel.MEDIUM;
 		
 		Canvas canvas  = new Canvas(GraphicsSystem.width, GraphicsSystem.height);
 		GraphicsContext context = canvas.getGraphicsContext2D();
@@ -71,17 +75,20 @@ public class Main extends Application implements EventHandler<KeyEvent>{
 	}
 	
 	private void createGameObjects() {
-		ball = new Ball(GraphicsSystem.width/2 - 10, GraphicsSystem.height * 0.8, 20, 1.9, -3.8);
+		GameConfig config = Values.difficultyLevel.getConfigInstance();
+		
+		ball = new Ball(GraphicsSystem.width/2 - 10, GraphicsSystem.height * 0.8, 20, config.ballXMovement, config.ballYMovement);
 		GraphicsSystem.ball = ball;
 		EventSystem.ball = ball;
 		
-		shelf = new Shelf(GraphicsSystem.width/2 -100, GraphicsSystem.height * 0.9, 200, 7);
+		shelf = new Shelf(GraphicsSystem.width/2 - config.shelfWidth/2, GraphicsSystem.height * 0.9, config.shelfWidth, 7);
 		GraphicsSystem.shelf = shelf;
 		EventSystem.shelf = shelf;
 		
-		blocks = new Block[10][6];
+		blocks = new Block[config.blockRows][config.blockCols];
 		GraphicsSystem.blocks = blocks;
 		EventSystem.blocks = blocks;
+		
 		// dzielimy górn¹ po³owê ekranu na siatkê, te zmienne to wielkoœæ komórki od siatki
 		float distanceX = (float)GraphicsSystem.width / blocks.length;
 		float distanceY = (float)GraphicsSystem.height / (2 * blocks[0].length);

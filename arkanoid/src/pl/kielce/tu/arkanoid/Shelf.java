@@ -3,13 +3,13 @@ package pl.kielce.tu.arkanoid;
 public class Shelf {
 	double xPos;
 	double yPos;
-	int width;
+	double width;
 	double movementSpeed;
 	int height = 20;
-	public Shelf(double xPos, double yPos, int width, double movementSpeed) {
+	public Shelf(double xPos, double yPos, double shelfWidth, double movementSpeed) {
 		this.xPos = xPos;
 		this.yPos = yPos;
-		this.width = width;
+		this.width = shelfWidth;
 		this.movementSpeed = movementSpeed;
 	}
 
